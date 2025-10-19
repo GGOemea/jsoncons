@@ -1,0 +1,20 @@
+<!--
+  Fallback implementation for $(TargetFrameworkVersionMajor).
+  This snippet can be imported by consumers who want the property available
+  when their MSBuild/SDK doesn't yet provide it.
+-->
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <!-- Only set if not already provided by the SDK/MSBuild -->
+  <PropertyGroup>
+    <TargetFrameworkVersionMajor Condition="'$(TargetFrameworkVersionMajor)' == ''">
+      $([System.Text.RegularExpressions.Regex]::Match('$(TargetFramework)','^net(\d+)').Groups[1].Value)
+    </TargetFrameworkVersionMajor>
+  </PropertyGroup>
+
+  <!-- Examples of usage -->
+  <Target Name="ShowTargetFrameworkMajor" AfterTargets="EvaluateProject">
+    <Message Text="TargetFramework='$(TargetFramework)' => TargetFrameworkVersionMajor='$(TargetFrameworkVersionMajor)'" Importance="High" />
+  </Target>
+
+</Project>
